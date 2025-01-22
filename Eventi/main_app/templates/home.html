@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flex-container">
-    <div class="text-content">
+<div class="home-page">
+    <div class="home-text">
         <h1>Wlecome To Eventi</h1>
         <p>CREATE, MANAGE, AND SHARE YOUR EVENTS</p>
         <p>WHILE ALLOWING OTHERS TO EASILY BOOK AND JOIN.</p>
         <h4>MAKE EVERY EVENT A SUCCESS!</h4>
     </div>
 
-    <div class="image-content">
+    <div class="home-image">
         {% load static %}
-        <img src="{% static 'images/home_page.png' %}" alt="Eventi Homepage" class="responsive-img">
+        <img src="{% static 'images/home_page.png' %}" alt="Eventi Homepage" class="home-img">
     </div>
 </div>
 {% endblock %}

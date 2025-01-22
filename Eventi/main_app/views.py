@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
-from .models import Category, Event, Book
+from .models import Category, Event, Book, Profile
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from .forms import ProfileForm
 
 
 class EventCreate(LoginRequiredMixin, CreateView):
@@ -123,9 +123,17 @@ def my_events(request):
     my_events = Event.objects.filter(user=request.user) 
     return render(request, 'my_events.html', {'my_events': my_events})
 
-@login_required
-def profile(request):
-    return render(request, 'users/profile.html')
+@login_required 
+def profile(request): 
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile) 
+        if form.is_valid():
+            form.save()
+            return redirect('users-profile')
+        else: 
+            form = ProfileForm(instance=profile)
+            return render(request, 'users/profile.html', {'form': form})
 
 def signup(request):
     error_message = ''
