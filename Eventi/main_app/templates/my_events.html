@@ -3,36 +3,35 @@
 {% block content %}
 <h1>My Events</h1>
 
-{% if my_events %}
+<div class="events-container">
+    {% if my_events %}
     {% for event in my_events %}
-
-
-    
     <div class="card">
         <a href="{% url 'event_detail' event.id %}">
-        <div class="card-content">
-        <div class="flex-container">
+            <div class="card-content">
+                <div class="flex-container">
 
-            <div>
-                {% load static %}
-                <img src="{% static event.image|cut:'main_app/static/' %}" width="110px" height="110px">
+                    <div>
+                        {% load static %}
+                        <img src="{% static event.image|cut:'main_app/static/' %}" width="110px" height="110px">
+                    </div>
+
+                    <div>
+                        <span class="card-title">{{ event.name }}</span>
+                        <p>Location: {{ event.location }} </p>
+                        <p>Price: {{ event.price }} </p>
+                        <p>Date: {{ event.date }} </p>
+                        <p>Description: {{ event.description }}</p>
+                    </div>
+
+
+                </div>
             </div>
-            
-        <div>
-            <span class="card-title">{{ event.name }}</span>
-            <p>Location: {{ event.location }} </p>
-            <p>Price: {{ event.price }} </p>
-            <p>Date: {{ event.date }} </p>
-            <p>Description: {{ event.description }}</p>
-        </div>
-
-
-        </div>
-    </div>
-    </a>
+        </a>
     </div>
     {% endfor %}
-{% else %}
+    {% else %}
     <p>No events created yet.</p>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}

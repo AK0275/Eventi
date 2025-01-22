@@ -4,32 +4,45 @@
 
 <h1>Events List</h1>
 
-{% for event in events %}
-<div class="card-index">
-<div class="card">
-    <a href="{% url 'event_detail' event.id %}">
-    <div class="card-content">
-    <div class="flex-container">
+<!-- Search Bar with Category Dropdown -->
+<form method="GET" action="{% url 'event_index' %}">
+    <select name="category">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+            {{ category.type }}
+        </option>
+        {% endfor %}
+    </select>
+    <input type="text" name="q" placeholder="Search events by name">
+    <button type="submit">Search</button>
+</form>
 
+<div class="events-container">
+    {% for event in events %}
+    <div class="card-index">
+        <div class="card">
+            <a href="{% url 'event_detail' event.id %}">
+                <div class="card-content">
+                    <div class="flex-container">
+                        <div>
+                            {% load static %}
+                            <img src="{% static event.image|cut:'main_app/static' %}" width="110px" height="110px">
+                        </div>
 
-    <div>
-        {% load static %}
-        <img src="{% static event.image|cut:'main_app/static' %}" width="110px" height="110px">
+                        <div>
+                            <span class="card-title">{{ event.name }}</span>
+                            <p class="p-card">Location: {{ event.location }} </p>
+                            <p class="p-card">Price: {{ event.price }} </p>
+                            <p class="p-card">Date: {{ event.date }} </p>
+                            <p class="p-card">Description: {{ event.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
-
-    <div>
-        <span class="card-title">{{ event.name }}</span>
-        <p class="p-card">Location: {{ event.location }} </p>
-        <p class="p-card">Price: {{ event.price }} </p>
-        <p class="p-card">Date: {{ event.date }} </p>
-        <p class="p-card">Description: {{ event.description }}</p>
-    </div>
-
-
-    </div>
+    {% endfor %}
 </div>
-</a>
-</div>
-{% endfor %}
-</div>
+
 {% endblock %}

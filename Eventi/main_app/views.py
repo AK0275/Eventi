@@ -56,14 +56,31 @@ def category(request):
     return render(request, 'category.html', {'categories': categories})
 
 
+# @login_required
+# def event_index(request): 
+#     category_id = request.GET.get('category') 
+#     if category_id: 
+#         events = Event.objects.filter(categories__id=category_id) 
+#     else: 
+#         events = Event.objects.all() 
+#     return render(request, 'events/index.html', {'events': events})
+
 @login_required
-def event_index(request): 
-    category_id = request.GET.get('category') 
-    if category_id: 
-        events = Event.objects.filter(categories__id=category_id) 
-    else: 
-        events = Event.objects.all() 
-    return render(request, 'events/index.html', {'events': events})
+def event_index(request):
+    category_id = request.GET.get('category')
+    query = request.GET.get('q')
+    
+    if category_id:
+        events = Event.objects.filter(categories__id=category_id)
+        if query:
+            events = events.filter(name__icontains=query)
+    else:
+        events = Event.objects.all()
+        if query:
+            events = events.filter(name__icontains=query)
+    
+    categories = Category.objects.all()
+    return render(request, 'events/index.html', {'events': events, 'categories': categories, 'selected_category': category_id})
 
 
 @login_required 
@@ -123,17 +140,38 @@ def my_events(request):
     my_events = Event.objects.filter(user=request.user) 
     return render(request, 'my_events.html', {'my_events': my_events})
 
-@login_required 
-def profile(request): 
+
+@login_required
+def profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile) 
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('users-profile')
-        else: 
-            form = ProfileForm(instance=profile)
-            return render(request, 'users/profile.html', {'form': form})
+    else:
+        form = ProfileForm(instance=profile)
+    
+    return render(request, 'users/profile.html', {'form': form})
+
+
+@login_required
+def update_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('users-profile')
+    else:
+        form = ProfileForm(instance=profile)
+    
+    return render(request, 'users/update_profile.html', {'form': form})
+
+
+
 
 def signup(request):
     error_message = ''
