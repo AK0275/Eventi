@@ -38,7 +38,9 @@ class EventDelete(LoginRequiredMixin, DeleteView):
     model = Event
     success_url = '/events/'
 
-# ///////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 def home(request):
@@ -55,15 +57,6 @@ def category(request):
     categories = Category.objects.all()
     return render(request, 'category.html', {'categories': categories})
 
-
-# @login_required
-# def event_index(request): 
-#     category_id = request.GET.get('category') 
-#     if category_id: 
-#         events = Event.objects.filter(categories__id=category_id) 
-#     else: 
-#         events = Event.objects.all() 
-#     return render(request, 'events/index.html', {'events': events})
 
 @login_required
 def event_index(request):

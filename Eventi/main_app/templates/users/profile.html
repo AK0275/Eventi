@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% load static %}
 {% block title %}Profile Page{% endblock title %}
 {% block content %}
+<div class="center">
 <div class="container mt-5">
     <h1>Profile for {{ user.username }}</h1>
     <div class="profile-info">
-        <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'ava/default.jpeg' %}{% endif %}" alt="Profile Image" width="150px" height="150px">
+    {% load static %}
+        <img src="{% if user.profile.avatar %}{% static user.profile.avatar.url|cut:'main_app/static/' %}{% else %}{% static 'ava/default.jpeg' %}{% endif %}" alt="Profile Image" width="150px" height="150px" class="profile-img">
         <p><strong>Name:</strong> {{ user.profile.name }}</p>
         <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
     </div>
     <a href="{% url 'update_profile' %}" class="btn btn-primary">Update Profile</a>
+</div>
 </div>
 {% endblock content %}
